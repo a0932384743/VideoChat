@@ -1,0 +1,59 @@
+image: docker:latest
+services:
+  - docker:18.09.6-dind
+
+stages:
+  - package
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay
+  DOCKER_HOST: "tcp://localhost:2375"
+  REPOSITORY_IMAGE: "${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_PIPELINE_IID}"
+
+Image-Package:
+  tags:
+    - kuber
+  only:
+    - dev
+  stage: package
+  image: docker:18.09.6-dind
+  script:
+  - rm -rf .env
+  - echo 'VUE_APP_SERVER_STUN_URL'=$VUE_APP_SERVER_STUN_URL >> .env
+  - echo 'VUE_APP_SERVER_TURN_URL'=$VUE_APP_SERVER_TURN_URL >> .env
+  - echo 'VUE_APP_SERVER_TURN_CREDENTIAL'=$VUE_APP_SERVER_TURN_CREDENTIAL >> .env
+  - echo 'VUE_APP_SERVER_TURN_USERNAME'=$VUE_APP_SERVER_TURN_USERNAME >> .env
+  - echo 'VUE_APP_FIREBASE_API_KEY'=$VUE_APP_FIREBASE_API_KEY >> .env
+  - echo 'VUE_APP_FIREBASE_AUTH_DOMAIN'=$VUE_APP_FIREBASE_AUTH_DOMAIN >> .env
+  - echo 'VUE_APP_FIREBASE_DATABASE_URL'=$VUE_APP_FIREBASE_DATABASE_URL >> .env
+  - echo 'VUE_APP_FIREBASE_PROJECT_ID'=$VUE_APP_FIREBASE_PROJECT_ID >> .env
+  - echo 'VUE_APP_FIREBASE_STORAGE_BUCKET'=$VUE_APP_FIREBASE_STORAGE_BUCKET >> .env
+  - echo 'VUE_APP_FIREBASE_MESSAGING_SENDER_ID'=$VUE_APP_FIREBASE_MESSAGING_SENDER_ID >> .env
+  - echo 'VUE_APP_FIREBASE_APP_ID'=$VUE_APP_FIREBASE_APP_ID >> .env
+
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN ${CI_REGISTRY}
+  - docker build -t ${REPOSITORY_IMAGE} .
+  - docker push ${REPOSITORY_IMAGE}
+
+Project-Deploy:
+  tags:
+  - kuber
+  only:
+    - dev
+  stage: deploy
+  image: roffe/kubectl:v1.13.2
+  script:
+  - NAMESPACE_NAME=$(echo -e gitdep-$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME | tr -d _)
+  - CI_PROJECT_NAME=$(echo -e $CI_PROJECT_NAME | tr -d _)
+  - HOSTNAME=$(echo -e $CI_PROJECT_PATH | tr '/' '-' | tr '_' '-')
+
+  - kubectl config set-cluster test-cluster --server=$(kubectl describe services | grep IP | sed -E 's/IP:[[:space:]]+//' | sed -E 's/Type:[[:space:]]+//' | tr -d ClusterIP)
+  - kubectl create secret -n "$NAMESPACE_NAME" docker-registry gitlab-registry --docker-server="$CI_REGISTRY" --docker-username="$REGISTRY_DEPLOY_LOGIN" --docker-password="$REGISTRY_DEPLOY_TOKEN" --docker-email="$GITLAB_USER_EMAIL" -o yaml --dry-run | kubectl replace -n "$NAMESPACE_NAME" --force -f -
+
+#Node App Deploy
+  - sed -i -e "s@__NAMESPACE_NAME__@${NAMESPACE_NAME}@g" dp.yml
+  - sed -i -e "s@__CI_PROJECT_NAME__@${CI_PROJECT_NAME}@g" dp.yml
+  - sed -i -e "s@__REPOSITORY_IMAGE__@${REPOSITORY_IMAGE}@g" dp.yml
+  - sed -i -e "s@__HOSTNAME__@${HOSTNAME}@g" dp.yml
+  - kubectl apply -f dp.yml

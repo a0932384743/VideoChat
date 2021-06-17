@@ -1,0 +1,69 @@
+// app global css in Sass form
+html
+  font-size: 16px
+
+html, body, #q-app
+  height: 100%
+
+.text-decoration-none
+  text-decoration: none
+
+.text-hover-decoration-none
+  &:hover
+    text-decoration: none
+
+.text-hover-decoration-underline
+  &:hover
+    text-decoration: underline
+
+.logo-site
+  font-size: 40px
+  font-family: "Droid Sans"
+  color: #666
+  font-weight: 700
+  line-height: 53px
+  padding: 30px
+
+  .q-img
+    margin-right: 10px
+    font-size: 20px
+    vertical-align: sub
+
+.hr-border-grey
+  background-color: $border-gray
+  height: 1px
+  border: none
+
+.app-text-gray-light
+  color: $gray-light
+
+.app-text-gray
+  color: $gray
+
+.app-button
+  font-size: 16px
+  padding: .2rem 1rem
+
+.get-premium
+  text-decoration: underline
+  &:hover
+    text-decoration: none
+
+.text-h7
+  font-size: 1.14rem
+
+.button-close
+  font-weight: bold
+  color: #999
+
+  &:hover
+    color: #7d7d7d
+    ::v-deep
+      .q-focus-helper
+        background: none !important
+
+@font-face
+  font-family: 'Roboto', sans-serif
+@font-face
+  font-family: DroidSans
+  src: url(./fonts/DroidSans.ttf)
