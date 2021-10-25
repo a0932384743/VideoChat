@@ -61,17 +61,17 @@ const routes: RouteConfig[] = [
       {
         path: 'invite/:roomId',
         name: 'VideoChatInviteTable',
-        component: () => import('../pages/videoChat/InviteTable.vue'),
+        component: () => import('pages/videoChat/InviteTable.vue'),
       },
       {
         path: 'full-room',
         name: 'FullRoom',
-        component: () => import('../pages/videoChat/FullRoom.vue'),
+        component: () => import('pages/videoChat/FullRoom.vue'),
       },
       {
         path: 'rating',
         name: 'Rating',
-        component: () => import('../pages/videoChat/Rating.vue'),
+        component: () => import('pages/videoChat/Rating.vue'),
         meta: { ifAuthenticated: true },
       },
     ],

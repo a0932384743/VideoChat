@@ -94,7 +94,7 @@ export default class VideoChat extends Vue {
         this.isLoading = true;
 
         this.messages.push(...ref.docChanges().map(({ doc }) => {
-          const message = doc.data(); 
+          const message = doc.data();
           if (message.userId && !this.users[message.userId]) {
             firebaseDb.collection('users')
               .doc(message.userId)

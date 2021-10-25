@@ -93,7 +93,8 @@ const userModule: Module<UserInterface, StateInterface> = {
         .collection('details')
         .doc(state.uid)
         .set(profile)
-        .then(() => {
+        .then((res) => {
+          console.log(res);
           commit('updateProfile', profile)
           commit('updateUserName', user.displayName)
         });
