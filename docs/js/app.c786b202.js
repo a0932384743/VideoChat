@@ -32,7 +32,7 @@
     }
       , i = [];
     function s(e) {
-        return c.p + "VideoChat/js/" + ({}[e] || e) + "." + {
+        return c.p + "js/" + ({}[e] || e) + "." + {
             2: "3bb611b1",
             3: "d08df2cb",
             4: "7a6c64d9",
@@ -228,7 +228,7 @@
         return Object.prototype.hasOwnProperty.call(e, t)
     }
     ,
-    c.p = "/",
+    c.p = "/VideoChat/",
     c.oe = function(e) {
         throw console.error(e),
         e
