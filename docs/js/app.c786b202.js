@@ -32,7 +32,7 @@
     }
       , i = [];
     function s(e) {
-        return c.p + "/VideoChat/js/" + ({}[e] || e) + "." + {
+        return c.p + "VideoChat/js/" + ({}[e] || e) + "." + {
             2: "3bb611b1",
             3: "d08df2cb",
             4: "7a6c64d9",
@@ -75,7 +75,7 @@
             9: 1
         };
         a[e] ? t.push(a[e]) : 0 !== a[e] && n[e] && t.push(a[e] = new Promise((function(t, n) {
-            for (var o = "/VideoChat/css/" + ({}[e] || e) + "." + {
+            for (var o = "VideoChat/css/" + ({}[e] || e) + "." + {
                 2: "5bc25301",
                 3: "3b206dcb",
                 4: "42156d82",
