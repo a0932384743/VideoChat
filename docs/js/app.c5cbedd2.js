@@ -27,7 +27,7 @@
     i = [];
 
   function s(e) {
-    return c.p + "/VideoChat/js/" + ({} [e] || e) + "." + {
+    return c.p + "/js/" + ({} [e] || e) + "." + {
       2: "d0b13714",
       3: "d08df2cb",
       4: "7a6c64d9",
@@ -68,7 +68,7 @@
         9: 1
       };
     a[e] ? t.push(a[e]) : 0 !== a[e] && n[e] && t.push(a[e] = new Promise((function(t, n) {
-      for (var o = "/VideoChat/css/" + ({} [e] || e) + "." + {
+      for (var o = "/css/" + ({} [e] || e) + "." + {
           2: "ccd0434d",
           3: "3b206dcb",
           4: "42156d82",
@@ -168,7 +168,7 @@
     return c.d(t, "a", t), t
   }, c.o = function(e, t) {
     return Object.prototype.hasOwnProperty.call(e, t)
-  }, c.p = "/", c.oe = function(e) {
+  }, c.p = "/VideoChat/", c.oe = function(e) {
     throw console.error(e), e
   };
   var u = window["webpackJsonp"] = window["webpackJsonp"] || [],
