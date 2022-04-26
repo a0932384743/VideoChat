@@ -312,9 +312,8 @@ export default class Table extends Vue {
           return;
         }
 
-        const roomTime = +((+firestore.Timestamp.now().toDate() - +this.currentRoom.createdAt.toDate()) / 60000).toFixed(2);
+        const roomTime = Number((firestore.Timestamp.now().toDate().getTime() - this.currentRoom.createdAt.toDate().getTime()) / 60000);
         const timer = this.getCurrentTimer(roomTime, this.timers.work, 0);
-
         this.activeTimer = timer.uri;
 
         this.buildUsers();

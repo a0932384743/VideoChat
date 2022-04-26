@@ -25,7 +25,6 @@ import {
   Watch,
   Prop,
 } from 'vue-property-decorator';
-// import RTCMultiConnection from 'rtcmulticonnection/dist/RTCMultiConnection.js';
 import RTCMultiConnection from 'rtcmulticonnection';
 import { RoomUsersInterface } from 'src/types/RoomUserInterface';
 
@@ -35,7 +34,7 @@ require('adapterjs');
 export default class VideoChat extends Vue {
   @Prop({ default: 'public-room', type: String }) private roomId!: string;
 
-  @Prop({ default: 'https://rtcmulticonnection.herokuapp.com:443/' }) private socketURL!: string;
+  @Prop({ default: 'https://rtc-camera.herokuapp.com/' }) private socketURL!: string;
 
   @Prop({ default: 190, type: [Number, String] }) private cameraHeight!: number | string;
 
@@ -61,38 +60,32 @@ export default class VideoChat extends Vue {
 
   mounted() {
     const that = this as VideoChat;
-
     this.isToggleVideo = this.enableVideo;
     this.isToggleAudio = this.enableAudio;
     this.rtcmConnection = new RTCMultiConnection();
     this.rtcmConnection.socketURL = this.socketURL;
     this.rtcmConnection.autoCreateMediaElement = false;
-    this.rtcmConnection.enableLogs = this.enableLogs;
-    // this.rtcmConnection.maxParticipantsAllowed = 4;
-    // this.rtcmConnection.userid = this.uid;
-    this.rtcmConnection.extra = {
-      uid: this.uid,
-    };
+    this.rtcmConnection.autoCloseEntireSession = true;
+
     this.rtcmConnection.session = {
       audio: this.enableAudio,
       video: this.enableVideo,
     };
 
-    this.rtcmConnection.iceServers = [
-      {
-        urls: process.env.VUE_APP_SERVER_STUN_URL,
-      },
-      {
-        urls: process.env.VUE_APP_SERVER_TURN_URL,
-        credential: process.env.VUE_APP_SERVER_TURN_CREDENTIAL,
-        username: process.env.VUE_APP_SERVER_TURN_USERNAME,
-      },
-    ];
+    this.rtcmConnection.iceServers = [{
+      urls: [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+        'stun:stun.l.google.com:19302?transport=udp',
+      ],
+    }];
 
     this.rtcmConnection.sdpConstraints.mandatory = {
       OfferToReceiveAudio: this.enableAudio,
       OfferToReceiveVideo: this.enableVideo,
     };
+
     this.rtcmConnection.onstream = (stream: any) => {
       const found = that.videoList.find((video) => video.id === stream.streamid);
       if (found === undefined) {

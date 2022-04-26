@@ -35,7 +35,6 @@ const routes: RouteConfig[] = [
       },
     ],
   },
-
   {
     path: '/video-chat',
     component: () => import('layouts/MainLayout.vue'),

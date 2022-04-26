@@ -1,8 +1,0 @@
-Dockerfile
-README.md
-.git/
-docker-compose.yml
-.gitlab-ci.yml
-.dockerignore
-.gitignore
-dp.yml
