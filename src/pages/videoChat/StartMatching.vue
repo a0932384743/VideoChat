@@ -189,7 +189,7 @@ export default class StartMatching extends Vue {
   updateUser(uid: string, userData: any) {
     return firebaseDb.collection('users')
       .doc(uid)
-      .update(userData);
+      .set(userData);
   }
 
   createRoomFromUsers(room: any, user: RoomUserInterface) {
